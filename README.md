@@ -89,7 +89,7 @@ Week 2 focused on advanced modeling, churn prediction, inventory logic, drift ch
 | 13 | Automated retraining pipeline plan | Completed | `dags/retraining_pipeline.py` |
 | 14 | Week 2 checkpoint | Completed | Notebooks 06-08 & DAG |
 
-## Week 3 Status - In Progress
+## Week 3 Status - Completed
 
 Week 3 focuses on building the interactive Streamlit dashboard.
 
@@ -98,9 +98,10 @@ Week 3 focuses on building the interactive Streamlit dashboard.
 | 15 | Streamlit dashboard skeleton | Completed | `app/main.py` |
 | 16 | Demand forecasting visualizations | Completed | `app/pages/01_demand_forecasting.py` |
 | 17 | Customer segmentation dashboard | Completed | `app/pages/02_customer_segmentation.py` |
-| 18 | Inventory optimization UI | Pending | - |
-| 19 | Real-time metrics and alerts | Pending | - |
-| 20 | Export functionality | Pending | - |
+| 18 | Inventory optimization UI | Completed | `app/pages/03_inventory_optimization.py` |
+| 19 | Real-time metrics and alerts | Completed | `app/pages/04_alerts_and_exports.py` |
+| 20 | Export functionality | Completed | `app/pages/04_alerts_and_exports.py` |
+| 21 | Week 3 checkpoint | Completed | Full Dashboard |
 
 ## Week 2 Model Summary
 
@@ -211,7 +212,7 @@ To launch the final Streamlit Executive Dashboard (Days 15-17) with the Demand F
 
 - Week 1: Completed
 - Week 2: Completed (Refactored to XGBoost, Optuna, Evidently, Airflow)
-- Week 3: In Progress (Days 15-17 completed)
+- Week 3: Completed (Streamlit UI with Exports and Alerts)
 - Week 4: Deployment and production polish pending
 
 ## Submission Notes
