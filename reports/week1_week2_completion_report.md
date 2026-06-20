@@ -32,11 +32,11 @@
 
 | Metric | Value |
 |---|---:|
-| Churn model AUC-ROC | 0.715 |
-| Churn model F1 | 0.644 |
-| Churn model accuracy | 0.651 |
+| Churn model AUC-ROC | 0.717 |
+| Churn model F1 | 0.640 |
+| Churn model accuracy | 0.647 |
 | Test customers | 843 |
-| High-risk customers | 1,039 |
+| High-risk customers | 1,072 |
 | Recent hybrid forecast MAPE | 0.314 |
 | Inventory SKUs scored | 2,953 |
 | Drift flags raised | 0 |
@@ -45,14 +45,14 @@
 
 | feature               |   importance_mean |   importance_std |
 |:----------------------|------------------:|-----------------:|
-| recency               |        0.0132859  |      0.0058307   |
-| tenure_days           |        0.00640569 |      0.000581136 |
-| monetary              |        0.00355872 |      0.00491968  |
-| avg_order_value       |        0.00355872 |      0.00835436  |
-| unique_products       |        0.00213523 |      0.00420404  |
-| active_days           |        0.00142349 |      0.00516525  |
-| orders_per_active_day |        0.00142349 |      0.00157372  |
-| frequency             |        0.00118624 |      0.00462481  |
+| recency               |        0.00403321 |       0.0082048  |
+| orders_per_active_day |       -0.00189798 |       0.00120973 |
+| avg_order_value       |       -0.00260973 |       0.00812899 |
+| tenure_days           |       -0.00260973 |       0.00264188 |
+| frequency             |       -0.00403321 |       0.00206828 |
+| unique_products       |       -0.00474496 |       0.00424402 |
+| active_days           |       -0.00474496 |       0.00561431 |
+| monetary              |       -0.0059312  |       0.00671038 |
 
 ## Retraining policy
 

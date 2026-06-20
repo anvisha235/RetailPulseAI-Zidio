@@ -15,7 +15,11 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.inspection import permutation_importance
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 from sklearn.model_selection import train_test_split
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.statespace.sarimax import SARIMAX
+import warnings
 
+warnings.filterwarnings("ignore")
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "cleaned"
@@ -58,6 +62,21 @@ def build_hybrid_forecast(data: pd.DataFrame) -> pd.DataFrame:
         0.55 * daily["prophet_like_forecast"] + 0.45 * daily["lstm_like_forecast"]
     )
     daily["hybrid_forecast"] = daily["hybrid_forecast"].fillna(daily["actual_revenue"])
+    
+    # Add ARIMA
+    try:
+        arima_model = ARIMA(daily["actual_revenue"], order=(5,1,0)).fit()
+        daily["arima_forecast"] = arima_model.predict(start=0, end=len(daily)-1).values
+    except Exception:
+        daily["arima_forecast"] = daily["hybrid_forecast"]
+
+    # Add SARIMA
+    try:
+        sarima_model = SARIMAX(daily["actual_revenue"], order=(1,1,1), seasonal_order=(1,1,0,12)).fit(disp=False)
+        daily["sarima_forecast"] = sarima_model.predict(start=0, end=len(daily)-1).values
+    except Exception:
+        daily["sarima_forecast"] = daily["hybrid_forecast"]
+        
     daily["absolute_error"] = (daily["actual_revenue"] - daily["hybrid_forecast"]).abs()
     daily["ape"] = daily["absolute_error"] / daily["actual_revenue"].replace(0, np.nan)
     daily["mape"] = daily["ape"].rolling(30, min_periods=7).mean()

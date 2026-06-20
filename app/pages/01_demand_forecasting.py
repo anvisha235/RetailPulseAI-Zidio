@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 st.set_page_config(page_title="Demand Forecasting", page_icon="📈", layout="wide")
 
 st.title("📈 Demand Forecasting & What-If Analysis")
-st.markdown("Review the hybrid ensemble forecast (Prophet + LSTM) and simulate demand shifts.")
+st.markdown("Review the demand forecasts (Hybrid, Prophet, LSTM, ARIMA, SARIMA) and simulate demand shifts.")
 
 @st.cache_data
 def load_forecast():
@@ -22,6 +22,22 @@ def load_forecast():
 df = load_forecast()
 
 if df is not None:
+    st.sidebar.header("Model Selection")
+    model_options = {
+        "Hybrid Ensemble": "hybrid_forecast",
+        "Prophet": "prophet_like_forecast",
+        "LSTM": "lstm_like_forecast",
+        "ARIMA": "arima_forecast",
+        "SARIMA": "sarima_forecast"
+    }
+    # Ensure columns exist before displaying them, to prevent errors if the pipeline hasn't run yet
+    available_options = {k: v for k, v in model_options.items() if v in df.columns}
+    if not available_options:
+        available_options = {"Hybrid Ensemble": "hybrid_forecast"} # Fallback
+        
+    selected_model = st.sidebar.selectbox("Choose Forecasting Model", options=list(available_options.keys()))
+    forecast_col = available_options[selected_model]
+
     st.sidebar.header("What-If Analysis")
     st.sidebar.markdown("Use this slider to simulate an artificial shift in future demand (e.g. from marketing campaigns or market shocks).")
     demand_multiplier = st.sidebar.slider("Future Demand Adjustment (%)", min_value=-50, max_value=100, value=0, step=5)
@@ -38,9 +54,9 @@ if df is not None:
         future = df.iloc[split_idx:].copy()
         
     # Apply what-if multiplier to future forecast
-    future['simulated_forecast'] = future['hybrid_forecast'] * (1 + (demand_multiplier / 100.0))
+    future['simulated_forecast'] = future[forecast_col] * (1 + (demand_multiplier / 100.0))
     
-    st.subheader(f"Hybrid Demand Forecast (Adjusted by {demand_multiplier}%)")
+    st.subheader(f"{selected_model} Demand Forecast (Adjusted by {demand_multiplier}%)")
     
     # Plotly interactive chart
     fig = go.Figure()
@@ -50,7 +66,7 @@ if df is not None:
                              mode='lines', name='Actual Revenue', line=dict(color='blue')))
                              
     # Original Forecast
-    fig.add_trace(go.Scatter(x=future['InvoiceDay'], y=future['hybrid_forecast'], 
+    fig.add_trace(go.Scatter(x=future['InvoiceDay'], y=future[forecast_col], 
                              mode='lines', name='Baseline Forecast', line=dict(color='orange', dash='dash')))
                              
     # Simulated Forecast (Only if multiplier != 0)
