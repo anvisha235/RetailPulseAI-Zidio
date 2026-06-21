@@ -103,6 +103,20 @@ Week 3 focuses on building the interactive Streamlit dashboard.
 | 20 | Export functionality | Completed | `app/pages/04_alerts_and_exports.py` |
 | 21 | Week 3 checkpoint | Completed | Full Dashboard |
 
+## Week 4 Status - Completed
+
+Week 4 focuses on deployment, CI/CD, and production monitoring.
+
+| Day | Task from brief | Status | Output |
+|---:|---|---|---|
+| 22 | Docker multi-stage builds | Completed | `Dockerfile`, `.dockerignore` |
+| 23 | Kubernetes manifests | Completed | `k8s/deployment.yaml`, `k8s/service.yaml` |
+| 24 | GitHub Actions CI/CD | Completed | `.github/workflows/ci-cd.yml` |
+| 25 | Cloud deployment docs | Completed | `DEPLOYMENT.md` |
+| 26 | Monitoring setup | Completed | `docker-compose.monitoring.yml`, Prometheus & Grafana configs |
+| 27 | Load testing & Validation | Completed | `scripts/locustfile.py`, `reports/week4_validation_report.md` |
+| 28 | Final QA & Polish | Completed | `README.md`, `reports/week3_week4_completion_report.md` |
+
 ## Week 2 Model Summary
 
 The Week 2 pipeline is reproducible from:
@@ -202,19 +216,55 @@ If you need to verify the Automated Retraining DAG (Day 13 Checkpoint), you can 
 ```
 
 ### Step 4: Week 3 - Interactive Dashboards
-To launch the final Streamlit Executive Dashboard (Days 15-17) with the Demand Forecasting and Churn Risk visualizations, run:
+To launch the final Streamlit Executive Dashboard (Days 15-17) with the Demand Forecasting and Churn Risk visualizations locally, run:
 ```powershell
 .venv\Scripts\python.exe -m streamlit run app/main.py
 ```
 *The dashboard will automatically open in your default web browser at `http://localhost:8501`. Use the sidebar to navigate between pages.*
+
+### Step 5: Week 4 - Docker & Cloud Production
+The application is now containerized and ready for scalable production deployment.
+
+#### 1. Run via Docker Locally
+```powershell
+# Build the Docker image
+docker build -t ms406/retailpulse:latest .
+
+# Run the container
+docker run -p 8501:8501 ms406/retailpulse:latest
+```
+Access the app at `http://localhost:8501`.
+
+#### 2. Run with Monitoring Stack (Prometheus + Grafana)
+```powershell
+docker-compose -f docker-compose.monitoring.yml up -d
+```
+- App: `http://localhost:8501`
+- Prometheus: `http://localhost:9090`
+- Grafana: `http://localhost:3000` (Login: admin/admin)
+
+#### 3. Run Load Testing
+```powershell
+# Install locust locally if needed: pip install locust
+locust -f scripts/locustfile.py
+```
+Access the Locust UI at `http://localhost:8089` to start the test against your running instance.
+
+#### 4. Kubernetes Deployment
+```powershell
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+```
+
+*For detailed cloud deployment to AWS/GCP, refer to `DEPLOYMENT.md`.*
 
 ## Current Project Milestone
 
 - Week 1: Completed
 - Week 2: Completed (Refactored to XGBoost, Optuna, Evidently, Airflow)
 - Week 3: Completed (Streamlit UI with Exports and Alerts)
-- Week 4: Deployment and production polish pending
+- Week 4: Completed (Docker, CI/CD, Kubernetes, Monitoring)
 
 ## Submission Notes
 
-This README now reflects the Zidio brief requirements for Week 1 and Week 2, including missing-value handling, cleaned data preparation, modeling outputs, and documented next steps.
+This README now reflects the complete Zidio brief requirements for all 4 Weeks, encompassing full ML pipelines, interactive dashboards, cloud deployment readiness, and MLOps practices. Please see the `reports/` folder for deeper performance validations and checkpoint details.
